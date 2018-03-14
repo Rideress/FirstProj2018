@@ -8,7 +8,7 @@ import java.util.Map;
 
      /**
       * @param name - name of a code.
-      * @param price - price of a code.
+      * @param price - price of a  code.
       *
       */
      private void addGood(String name,String price){
