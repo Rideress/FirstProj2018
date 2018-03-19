@@ -40,8 +40,10 @@ import java.util.Map;
          }
      }
      /**
+      * add a good and price to the list
       * @param name - name of a code.
-      * @param price - price of a  code.
+      * @param price - price of a code.
+      * @return hashcode as code with good and price
       *
       */
      public int addGood(String name,double price){
@@ -50,16 +52,40 @@ import java.util.Map;
          return tmp.hashCode();
      }
 
+     /**
+      *
+      * @param code - code of good
+      * @param nName - new name of good
+      */
+
      public void editName(int code, String nName){
          priceList.get(code).name = nName;
      }
 
+     /**
+      *
+      * @param code - code of good
+      * @param nPrice - new price of good
+      */
+
      public void editPrice(int code, double nPrice){
          priceList.get(code).price = nPrice;
      }
+
+     /**
+      * remove good from the price list
+      * @param code - code of good
+      */
      public void remove(int code){
          priceList.remove(code);
      }
+
+     /**
+      *
+      * @param code - code of good
+      * @param num - number of products
+      * @return total price of products
+      */
      public double getTotalPrice(int code, int num){
          return priceList.get(code).price * num;
      }
