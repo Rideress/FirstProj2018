@@ -46,10 +46,13 @@ import java.util.Map;
       * @return hashcode as code with good and price
       *
       */
-     public int addGood(String name,double price){
-         Good tmp = new Good(name,price);
-         priceList.put(tmp.hashCode(),tmp);
-         return tmp.hashCode();
+     public int addGood(int code, String name, String price){
+         if(priceList.get(code) != null) return -1;
+         String[] tmp = price.split(".");
+         if(tmp.length > 2) return -1;
+         if(tmp.length == 2 && tmp[1].length() > 4) return -1;
+         priceList.put(code,new Good(name,Double.parseDouble(price)));
+         return code;
      }
 
      /**
@@ -58,18 +61,24 @@ import java.util.Map;
       * @param nName - new name of good
       */
 
-     public void editName(int code, String nName){
+     public boolean editName(int code, String nName){
+         if(priceList.get(code)==null) return false;
          priceList.get(code).name = nName;
+         return true;
      }
 
      /**
-      *
-      * @param code - code of good
+      *  @param code - code of good
       * @param nPrice - new price of good
       */
 
-     public void editPrice(int code, double nPrice){
-         priceList.get(code).price = nPrice;
+     public boolean editPrice(int code, String nPrice){
+         String[] tmp = nPrice.split(".");
+         if(tmp.length > 2) return false;
+         if(tmp.length == 2 && tmp[1].length() > 4) return false;
+         if(priceList.get(code)==null) return false;
+         priceList.get(code).price = Double.parseDouble(nPrice);
+         return true;
      }
 
      /**
@@ -87,6 +96,7 @@ import java.util.Map;
       * @return total price of products
       */
      public double getTotalPrice(int code, int num){
+         if(priceList.get(code)==null) return -1;
          return priceList.get(code).price * num;
      }
 
@@ -94,7 +104,7 @@ import java.util.Map;
      public String toString() {
          StringBuilder res = new StringBuilder();
          for(Map.Entry e : priceList.entrySet()){
-             res.append(e.getKey()).append(" ").append(e.getValue()).append("\n");
+             res.append(e.getKey()).append(" ").append(e.getValue().toString()).append("\n");
          }
          return res.toString();
      }
