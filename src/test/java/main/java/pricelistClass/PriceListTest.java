@@ -26,7 +26,7 @@ public class PriceListTest {
         pr.addGood(1,"Зачет", "10.2");
         pr.addGood(2,"Экзамен", "120.11");
         assertEquals(pr.toString(), "1 Зачет:10.2\n" +
-                "2 Экзамен:120.11\n");
+                " Экзамен:120.11\n");
         pr.remove(2);
         assertEquals(pr.toString(),"1 Зачет:10.2\n");
     }
