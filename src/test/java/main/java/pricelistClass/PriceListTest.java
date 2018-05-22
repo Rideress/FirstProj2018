@@ -1,6 +1,6 @@
 package main.java.pricelistClass;
 
-import static org.junit.Assert.*;
+import static junit.framework.Assert.*;
 
 public class PriceListTest {
     private PriceList pr = new PriceList();
@@ -8,7 +8,7 @@ public class PriceListTest {
     public void addGood() throws Exception {
         pr = new PriceList();
         pr.addGood(1,"Зачет", "10.2");
-        assertEquals(pr.toString(),"1 Зачет:10.2\n");
+        assertEquals(new PriceList.Good("Зачет", 10, 20),pr.getGood(1));
     }
 
     @org.junit.Test
@@ -17,7 +17,7 @@ public class PriceListTest {
         pr.addGood(1,"Зачет", "10.2");
         pr.editName(1, "Экзамен");
         pr.editPrice(1, "120.11");
-        assertEquals(pr.toString(),"1 Экзамен:120.11\n");
+        assertEquals(new PriceList.Good("Экзамен", 120, 11),pr.getGood(1));
     }
 
     @org.junit.Test
@@ -25,17 +25,20 @@ public class PriceListTest {
         pr = new PriceList();
         pr.addGood(1,"Зачет", "10.2");
         pr.addGood(2,"Экзамен", "120.11");
-        assertEquals(pr.toString(), "1 Зачет:10.2\n" +
-                "2 Экзамен:120.11\n");
+        assertEquals(new PriceList.Good("Зачет", 10, 20), pr.getGood(1));
+        assertEquals(new PriceList.Good("Экзамен", 120, 11), pr.getGood(2));
         pr.remove(2);
-        assertEquals(pr.toString(),"1 Зачет:10.2\n");
+        PriceList lst = new PriceList();
+        lst.addGood(1,"Зачет","10.2");
+        assertEquals(lst,pr);
+        assertNull(pr.getGood(2));
     }
 
     @org.junit.Test
     public void getTotalPrice() throws Exception {
         pr = new PriceList();
         pr.addGood(1,"Зачет", "10.2");
-        assertTrue(Double.compare(pr.getTotalPrice(1,10),102.0) == 0);
+        assertEquals(0, Double.compare(pr.getTotalPrice(1, 10), 102.0));
     }
 
 }
