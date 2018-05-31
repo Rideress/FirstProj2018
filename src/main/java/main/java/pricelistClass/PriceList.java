@@ -8,12 +8,12 @@ public class PriceList {
     private Map<Integer,Good> priceList = new HashMap<Integer, Good>();
     static class Good{
         private String name;
-        private int price;
+        private Integer price;
         private Integer rightPrice;
         public Good (String name, int pr, int r){
             this.name = name;
-            this.price = pr + (r / 100);
-            this.rightPrice = r % 100;
+            this.price = pr;
+            this.rightPrice = r;
         }
 
         @Override
@@ -28,13 +28,12 @@ public class PriceList {
 
         @Override
         public int hashCode() {
-
             return Objects.hash(name, price, rightPrice);
         }
 
         @Override
         public String toString() {
-            return String.format("%s:%d.%s", name, price, rightPrice < 10 ? "0"+rightPrice.toString() : rightPrice.toString());
+            return String.format("%s:%d.%2d", name, price, rightPrice);
         }
     }
     /**
@@ -48,7 +47,7 @@ public class PriceList {
         if(priceList.get(code) != null) return -1;
         String[] tmp = price.split("\\.");
         if(tmp.length > 2) return -1;
-        priceList.put(code,new Good(name, Integer.valueOf(tmp[0]), Integer.valueOf(tmp[1].length() == 1 ? tmp[1]+"0" : tmp[1])));
+        priceList.put(code,new Good(name, Integer.valueOf(tmp[0]), round(Integer.valueOf(tmp[1]))));
         return code;
     }
 
@@ -64,6 +63,16 @@ public class PriceList {
         return true;
     }
 
+    private int round(int pr){
+        if(pr < 10) return pr * 10;
+        while(pr > 100){
+            int t = pr % 10;
+            pr /= 10;
+            if(t > 4) pr++;
+        }
+        return pr;
+    }
+
     /**
      * @param code - code of good
      * @param nPrice - new price of good
@@ -74,9 +83,9 @@ public class PriceList {
         if(tmp.length > 2) return false;
         if(priceList.get(code)==null) return false;
         int left = Integer.valueOf(tmp[0]);
-        int right = Integer.valueOf(tmp[1].length() == 1 ? tmp[1]+"0" : tmp[1]);
-        priceList.get(code).price = left + (right / 100);
-        priceList.get(code).rightPrice = right % 100;
+        int right = round(Integer.valueOf(tmp[1]));
+        priceList.get(code).price = left;
+        priceList.get(code).rightPrice = right;
         return true;
     }
 
