@@ -33,7 +33,7 @@ public class PriceList {
 
         @Override
         public String toString() {
-            return String.format("%s:%d.%2d", name, price, rightPrice);
+            return String.format("%s:%d.%02d", name, price, rightPrice);
         }
     }
     /**
@@ -47,7 +47,15 @@ public class PriceList {
         if(priceList.get(code) != null) return -1;
         String[] tmp = price.split("\\.");
         if(tmp.length > 2) return -1;
-        priceList.put(code,new Good(name, Integer.valueOf(tmp[0]), round(Integer.valueOf(tmp[1]))));
+        int left = 0;
+        int right = 0;
+        try{
+            left = Integer.valueOf(tmp[0]);
+            right = round(Integer.valueOf(tmp[1]));
+        }catch(Exception ex){
+            throw new NumberFormatException();
+        }
+        priceList.put(code,new Good(name, left, right));
         return code;
     }
 
@@ -82,8 +90,14 @@ public class PriceList {
         String[] tmp = nPrice.split("\\.");
         if(tmp.length > 2) return false;
         if(priceList.get(code)==null) return false;
-        int left = Integer.valueOf(tmp[0]);
-        int right = round(Integer.valueOf(tmp[1]));
+        int left = 0;
+        int right = 0;
+        try{
+            left = Integer.valueOf(tmp[0]);
+            right = round(Integer.valueOf(tmp[1]));
+        }catch(Exception ex){
+            throw new NumberFormatException();
+        }
         priceList.get(code).price = left;
         priceList.get(code).rightPrice = right;
         return true;
